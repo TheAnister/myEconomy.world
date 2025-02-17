@@ -135,3 +135,27 @@ body {
     grid-template-columns: 1fr;
   }
 }
+#country-stats {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#uk-flag {
+  width: 100px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.notification {
+  background-color: #f9f9f9;
+  border-left: 5px solid #2196F3;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.notification.fade-out {
+  transform: translateX(100%);
+  opacity: 0;
+}
