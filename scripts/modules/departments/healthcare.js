@@ -43,7 +43,7 @@ export class HealthcareDepartment extends DepartmentBase {
   // --- Core Configuration Methods ---
   setDoctorCount(number) {
     this.metrics.doctors = GameMath.clamp(number, 100000, 300000);
-    this.#updateWorkforceMetrics();
+    this.updateWorkforceMetrics();
     eventSystem.queueEvent({
       type: 'healthcare.staffing_change',
       data: { doctors: this.metrics.doctors }
@@ -53,7 +53,7 @@ export class HealthcareDepartment extends DepartmentBase {
   setSubsidyLevel(percentage) {
     this.metrics.subsidyPercentage = GameMath.clamp(percentage, 0, 1);
     this.policies.freeAtPointOfUse = percentage === 1;
-    
+
     eventSystem.queueEvent({
       type: 'healthcare.funding_change',
       data: { subsidy: this.metrics.subsidyPercentage }
@@ -62,7 +62,7 @@ export class HealthcareDepartment extends DepartmentBase {
 
   adjustSalaries(percentageChange) {
     this.metrics.doctorSalary *= 1 + percentageChange;
-    this.#updateBudgetRequirements();
+    this.updateBudgetRequirements();
   }
 
   // --- Economic Calculations ---
@@ -70,7 +70,7 @@ export class HealthcareDepartment extends DepartmentBase {
     const baseCost = this.metrics.doctors * this.metrics.doctorSalary;
     const facilityCosts = this.metrics.facilities * 2500000; // Annual facility costs
     const researchFunding = this.budget * 0.12;
-    
+
     return (baseCost + facilityCosts + researchFunding) * this.metrics.subsidyPercentage;
   }
 
@@ -89,10 +89,10 @@ export class HealthcareDepartment extends DepartmentBase {
           1
         );
         break;
-        
+
       case 'mentalHealthFocus':
         this.policies.mentalHealthFunding += 0.05;
-        this.#redistributeBudget();
+        this.redistributeBudget();
         break;
     }
   }
@@ -100,10 +100,10 @@ export class HealthcareDepartment extends DepartmentBase {
   // --- Performance Simulation ---
   simulateMonth() {
     // Update performance metrics based on funding
-    this.performance.lifeExpectancy = this.#calculateLifeExpectancy();
-    this.performance.patientSatisfaction = this.#calculateSatisfaction();
-    this.performance.waitingTimes = this.#calculateWaitingTimes();
-    
+    this.performance.lifeExpectancy = this.calculateLifeExpectancy();
+    this.performance.patientSatisfaction = this.calculateSatisfaction();
+    this.performance.waitingTimes = this.calculateWaitingTimes();
+
     // Store historical data
     this.historicalData.push({
       month: Date.now(),
@@ -113,7 +113,7 @@ export class HealthcareDepartment extends DepartmentBase {
   }
 
   // --- Private Methods ---
-  #updateWorkforceMetrics() {
+  updateWorkforceMetrics() {
     const doctorsPerCapita = this.metrics.doctors / 67; // 67M population
     this.performance.emergencyResponse = Math.max(
       4,
@@ -121,14 +121,14 @@ export class HealthcareDepartment extends DepartmentBase {
     );
   }
 
-  #calculateLifeExpectancy() {
+  calculateLifeExpectancy() {
     const base = 80;
     const fundingImpact = (this.metrics.subsidyPercentage - 0.8) * 2;
     const doctorImpact = (this.metrics.doctors - 150000) / 50000;
     return base + fundingImpact + doctorImpact;
   }
 
-  #calculateSatisfaction() {
+  calculateSatisfaction() {
     const waitingTimeFactor = (8 - this.performance.waitingTimes) / 8;
     const costFactor = this.metrics.subsidyPercentage;
     return GameMath.clamp(
@@ -138,17 +138,17 @@ export class HealthcareDepartment extends DepartmentBase {
     );
   }
 
-  #calculateWaitingTimes() {
+  calculateWaitingTimes() {
     const demand = 0.8 + (1 - this.metrics.subsidyPercentage) * 0.3;
     const capacity = this.metrics.doctors / 150000;
     return GameMath.clamp(4 * (demand / capacity), 2, 26);
   }
 
-  #redistributeBudget() {
+  redistributeBudget() {
     const total = Object.values(this.policies)
       .filter(v => typeof v === 'number')
       .reduce((sum, v) => sum + v, 0);
-    
+
     // Normalize percentages
     Object.keys(this.policies).forEach(k => {
       if (typeof this.policies[k] === 'number') {

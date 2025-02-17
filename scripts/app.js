@@ -2,7 +2,7 @@ import { StatisticsManager } from './modules/statistics.js';
 import { SaveManager } from './modules/save-manager.js';
 import { NotificationSystem } from './modules/notification-system.js';
 import { createExampleLineChart } from './utils/charts.js';
-import { formatNumber } from './utils/formatters.js';
+import { formatNumber } from './utils/helpers.js';
 
 class App {
   constructor() {
@@ -29,15 +29,15 @@ class App {
   setupEventListeners() {
     document.getElementById('saveButton')?.addEventListener('click', this.saveGameState.bind(this));
     document.getElementById('loadButton')?.addEventListener('click', this.loadSavedGameState.bind(this));
-
+    
     document.querySelectorAll('.nav-btn').forEach(button => {
       button.addEventListener('click', this.handleNavigation.bind(this));
     });
-
+    
     document.querySelectorAll('.speed-btn').forEach(button => {
       button.addEventListener('click', this.changeSpeed.bind(this));
     });
-
+    
     document.getElementById('pause-btn')?.addEventListener('click', this.pauseGame.bind(this));
   }
 

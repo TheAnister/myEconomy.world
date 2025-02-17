@@ -1,5 +1,5 @@
-import { EconomicIndicators } from '../utils/helpers.js';
-import { GameMath } from '../utils/game-math.js';
+import { EconomicIndicators } from '/scripts/utils/helpers.js';
+import { GameMath } from '/scripts/utils/game-math.js';
 
 export class EconomicRelationsModel {
   constructor() {
@@ -172,17 +172,17 @@ export class EconomicRelationsModel {
   }
 
   // -- Private Methods -- //
-  #calculateSectorVulnerability(aiCountry, playerActions) {
+  calculateSectorVulnerability(aiCountry, playerActions) {
     return Object.fromEntries(
       Object.entries(aiCountry.sectors).map(([sector, share]) => [
         sector,
         playerActions.tariffs[sector] * share * 
-        this.#getSectorElasticity(sector)
+        this.getSectorElasticity(sector)
       ])
     );
   }
 
-  #getSectorElasticity(sector) {
+  getSectorElasticity(sector) {
     const elasticities = {
       technology: 1.2,
       manufacturing: 0.8,
@@ -192,7 +192,7 @@ export class EconomicRelationsModel {
     return elasticities[sector] || 1.0;
   }
 
-  #applyTraitModifiers(response, traits) {
+  applyTraitModifiers(response, traits) {
     // Modify responses based on AI personality
     if (traits.riskAppetite < 0.3) {
       response.monetary.interestRate *= 1.2;
@@ -206,18 +206,29 @@ export class EconomicRelationsModel {
     return response;
   }
 
-  #calculateMilitaryPressure(aiCountry) {
-    const neighbors = this.#getGeographicNeighbors(aiCountry);
+  calculateMilitaryPressure(aiCountry) {
+    const neighbors = this.getGeographicNeighbors(aiCountry);
     return neighbors.reduce((sum, neighbor) => {
       const powerRatio = neighbor.militaryStrength / aiCountry.militaryStrength;
       return sum + (powerRatio > 1 ? powerRatio - 1 : 0);
     }, 0) / neighbors.length;
   }
 
-  #calculateAllianceStrength(aiCountry) {
-    const alliances = this.#getActiveAlliances(aiCountry);
+  calculateAllianceStrength(aiCountry) {
+    const alliances = this.getActiveAlliances(aiCountry);
     return alliances.reduce((strength, alliance) => {
       return strength + (alliance.strength * alliance.trustLevel);
     }, 0);
+  }
+
+  // Placeholder methods for private fields
+  getGeographicNeighbors(aiCountry) {
+    // Placeholder implementation
+    return [];
+  }
+
+  getActiveAlliances(aiCountry) {
+    // Placeholder implementation
+    return [];
   }
 }

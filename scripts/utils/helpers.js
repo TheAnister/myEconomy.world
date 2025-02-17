@@ -97,3 +97,24 @@ export function sumByKey(array, key) {
 export function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+
+export const EconomicIndicators = {
+  GDP: 'Gross Domestic Product',
+  UnemploymentRate: 'Unemployment Rate',
+  InflationRate: 'Inflation Rate',
+  LiteracyRate: 'Literacy Rate',
+  LifeExpectancy: 'Life Expectancy',
+  PovertyRate: 'Poverty Rate',
+  CarbonFootprint: 'Carbon Footprint'
+};
+
+export const GameMath = {
+  add: (a, b) => a + b,
+  subtract: (a, b) => a - b,
+  multiply: (a, b) => a * b,
+  divide: (a, b) => a / b,
+  round: (num, decimalPlaces = 2) => {
+    const factor = 10 ** decimalPlaces;
+    return Math.round(num * factor) / factor;
+  }
+};

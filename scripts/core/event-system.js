@@ -1,5 +1,28 @@
 import { GameMath, EconomicIndicators } from '../utils/helpers.js';
 
+class EventSystem {
+  constructor() {
+    this.events = [];
+  }
+
+  initialize() {
+    this.registerCoreEvents();
+    // Other initialization logic...
+  }
+
+  registerCoreEvents() {
+    this.events.forEach(event => {
+      event.handler = event.handler.bind(this);
+    });
+  }
+
+  addEvent(event) {
+    this.events.push(event);
+  }
+}
+
+export default EventSystem;
+
 export class EventSystem {
   constructor() {
     this.eventQueue = new Map();
@@ -18,7 +41,7 @@ export class EventSystem {
   }
 
   initialize() {
-    this.#registerCoreEvents();
+    this.registerCoreEvents();
     return this;
   }
 
@@ -51,7 +74,7 @@ export class EventSystem {
       throw new Error(`Invalid event phase: ${phase}`);
     }
 
-    const eventObject = this.#createEventObject(event);
+    const eventObject = this.createEventObject(event);
     this.eventPhases[phase].push(eventObject);
     
     return eventObject.id;
@@ -63,25 +86,25 @@ export class EventSystem {
     const events = this.eventPhases[phase];
     while (events.length > 0) {
       const event = events.shift();
-      this.#processSingleEvent(event);
+      this.processSingleEvent(event);
     }
   }
 
   // -- Core Event Processing -- //
-  #processSingleEvent(event) {
+  processSingleEvent(event) {
     try {
-      if (!this.#validateEventStructure(event)) return;
+      if (!this.validateEventStructure(event)) return;
 
       // Store in history before processing
       this.historicalEvents.push(event);
       
       // Direct dispatch for system-critical events
       if (event.type === 'system') {
-        return this.#handleSystemEvent(event);
+        return this.handleSystemEvent(event);
       }
 
       // Get all handlers for event type hierarchy
-      const handlers = this.#getHandlersForType(event.type);
+      const handlers = this.getHandlersForType(event.type);
       
       handlers.forEach(({ handler, enabled }) => {
         if (enabled) {
@@ -90,14 +113,14 @@ export class EventSystem {
       });
 
       // Post-processing hooks
-      this.#runPostProcessing(event);
+      this.runPostProcessing(event);
     } catch (error) {
       console.error(`Event processing failed: ${event.type}`, error);
     }
   }
 
   // -- Event Type Hierarchy Handling -- //
-  #getHandlersForType(eventType) {
+  getHandlersForType(eventType) {
     const typeComponents = eventType.split('.');
     const handlers = [];
     
@@ -113,23 +136,23 @@ export class EventSystem {
   }
 
   // -- Core Event Types -- //
-  #registerCoreEvents() {
+  registerCoreEvents() {
     this.coreEventTypes.forEach(type => {
-      this.subscribe(`${type}.*`, this.#logCoreEvent.bind(this));
+      this.subscribe(`${type}.*`, this.logCoreEvent.bind(this));
     });
 
     // System events
-    this.subscribe('system.error', this.#handleErrorEvent.bind(this), 100);
-    this.subscribe('system.debug', this.#handleDebugEvent.bind(this), 100);
+    this.subscribe('system.error', this.handleErrorEvent.bind(this), 100);
+    this.subscribe('system.debug', this.handleDebugEvent.bind(this), 100);
   }
 
   // -- Event Validation -- //
-  #validateEventStructure(event) {
+  validateEventStructure(event) {
     const requiredFields = ['id', 'type', 'timestamp', 'data'];
     return requiredFields.every(field => field in event);
   }
 
-  #createEventObject(baseEvent) {
+  createEventObject(baseEvent) {
     return {
       id: GameMath.generateUUID(),
       timestamp: Date.now(),
@@ -154,21 +177,21 @@ export class EventSystem {
   }
 
   // -- Specialized Handlers -- //
-  #handleSystemEvent(event) {
+  handleSystemEvent(event) {
     switch(event.subtype) {
       case 'save':
-        this.#triggerAutosave(event.data);
+        this.triggerAutosave(event.data);
         break;
       case 'load':
-        this.#handleGameLoad(event.data);
+        this.handleGameLoad(event.data);
         break;
       case 'reset':
-        this.#resetSystemState();
+        this.resetSystemState();
         break;
     }
   }
 
-  #handleErrorEvent(event) {
+  handleErrorEvent(event) {
     console.error(`[SYSTEM ERROR] ${event.data.message}`, event.data.error);
     
     if (event.data.critical) {
@@ -179,7 +202,7 @@ export class EventSystem {
     }
   }
 
-  #logCoreEvent(event) {
+  logCoreEvent(event) {
     if (process.env.NODE_ENV === 'development') {
       console.log(`[EVENT] ${event.type}`, event.data);
     }
@@ -233,6 +256,23 @@ export class EventSystem {
       mainPhase: state.queuedEvents.mainPhase,
       postSimulation: state.queuedEvents.postSimulation
     };
+  }
+
+  // Placeholder methods for private fields
+  runPostProcessing(event) {
+    // Placeholder implementation
+  }
+
+  triggerAutosave(data) {
+    // Placeholder implementation
+  }
+
+  handleGameLoad(data) {
+    // Placeholder implementation
+  }
+
+  resetSystemState() {
+    // Placeholder implementation
   }
 }
 

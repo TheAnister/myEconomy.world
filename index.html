@@ -11,7 +11,6 @@
 <body>
     <header class="dashboard-header">
         <h1>myEconomy - United Kingdom</h1>
-        <img src="assets/flags/uk.png" alt="UK Flag" id="uk-flag">
 
         <div class="time-indicator">
             <span id="current-date">January 2025</span>
@@ -20,7 +19,6 @@
     </header>
 
     <main class="container">
-        <!-- Left Panel - Quick Stats -->
         <section class="stats-panel">
             <div class="economic-indicators">
                 <h2>Economic Snapshot</h2>
@@ -43,7 +41,6 @@
                     </div>
                 </div>
             </div>
-            
             <div class="quick-access">
                 <h2>Government Tools</h2>
                 <div class="toolbar">
@@ -57,7 +54,6 @@
             </div>
         </section>
 
-        <!-- Main Control Center -->
         <section class="control-center">
             <nav class="main-nav">
                 <button class="nav-btn active" data-panel="departments">
@@ -81,27 +77,20 @@
                     <span>Next Month</span>
                 </button>
             </nav>
-
-            <!-- Dynamic Content Panels -->
             <div class="content-panel" id="departments-panel">
                 <!-- Department controls will be loaded here -->
             </div>
-
             <div class="content-panel hidden" id="companies-panel">
                 <!-- Company management interface -->
             </div>
-
             <div class="content-panel hidden" id="statistics-panel">
                 <!-- Statistical visualizations -->
             </div>
-
             <div class="content-panel hidden" id="save-load-panel">
                 <!-- Save/load interface -->
             </div>
         </section>
     </main>
-
-    <!-- System Notifications -->
     <div class="notification-center">
         <div class="notification-header">
             <h3>Events & Alerts</h3>
@@ -109,11 +98,11 @@
         </div>
         <ul id="notification-list"></ul>
     </div>
-
     <script src="scripts/core/data-loader.js" type="module"></script>
     <script src="scripts/core/economy-engine.js" type="module"></script>
     <script src="scripts/modules/departments/healthcare.js" type="module"></script>
     <script src="scripts/modules/companies.js" type="module"></script>
     <script src="scripts/app.js" type="module"></script>
+    <script src="scripts/libs/chart.min.js"></script>
 </body>
 </html>

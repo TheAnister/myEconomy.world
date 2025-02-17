@@ -1,4 +1,12 @@
-import { DepartmentBase } from './department-base.js';
+
+export class DepartmentBase {
+  constructor({ name, description, ...config }) {
+    this.name = name;
+    this.description = description;
+    Object.assign(this, config);
+  }
+}
+
 
 export class TaxationDepartment extends DepartmentBase {
   constructor(config) {
@@ -93,5 +101,19 @@ export class TaxationDepartment extends DepartmentBase {
 
   simulateMonth() {
     // Implement monthly simulation logic for the Taxation Department
+  }
+}
+
+export class DepartmentManager {
+  constructor() {
+    this.departments = [];
+  }
+
+  addDepartment(department) {
+    this.departments.push(department);
+  }
+
+  getDepartments() {
+    return this.departments;
   }
 }

@@ -1,5 +1,5 @@
 import { DataLoader } from '../core/data-loader.js';
-import Chart from 'chart.js/auto';
+import Chart from 'Chart.js/auto';
 
 export class StatisticsManager {
   constructor() {
