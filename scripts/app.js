@@ -9,8 +9,9 @@ class App {
     this.statisticsManager = new StatisticsManager();
     this.saveManager = new SaveManager();
     this.notificationSystem = new NotificationSystem();
-    this.chartContext = document.getElementById('chart').getContext('2d');
+    this.chartContext = document.getElementById('chart')?.getContext('2d');
     this.chart = null;
+    this.currentSpeed = 1;
   }
 
   async initialize() {
@@ -18,14 +19,26 @@ class App {
     await this.saveManager.initialize();
     this.setupEventListeners();
     this.notificationSystem.subscribe(this.handleNotification.bind(this));
-    this.chart = createExampleLineChart(this.chartContext);
+    if (this.chartContext) {
+      this.chart = createExampleLineChart(this.chartContext);
+    }
     this.renderStatistics();
     this.loadSavedGameState();
   }
 
   setupEventListeners() {
-    document.getElementById('saveButton').addEventListener('click', this.saveGameState.bind(this));
-    document.getElementById('loadButton').addEventListener('click', this.loadSavedGameState.bind(this));
+    document.getElementById('saveButton')?.addEventListener('click', this.saveGameState.bind(this));
+    document.getElementById('loadButton')?.addEventListener('click', this.loadSavedGameState.bind(this));
+
+    document.querySelectorAll('.nav-btn').forEach(button => {
+      button.addEventListener('click', this.handleNavigation.bind(this));
+    });
+
+    document.querySelectorAll('.speed-btn').forEach(button => {
+      button.addEventListener('click', this.changeSpeed.bind(this));
+    });
+
+    document.getElementById('pause-btn')?.addEventListener('click', this.pauseGame.bind(this));
   }
 
   handleNotification(notification) {
@@ -66,6 +79,32 @@ class App {
     this.saveManager.loadGameState();
     this.renderStatistics();
     this.notificationSystem.addNotification({ type: 'system', message: 'Game state loaded successfully!' });
+  }
+
+  handleNavigation(event) {
+    const targetPanel = event.currentTarget.getAttribute('data-panel');
+    document.querySelectorAll('.content-panel').forEach(panel => {
+      panel.classList.add('hidden');
+    });
+    document.getElementById(`${targetPanel}-panel`).classList.remove('hidden');
+    document.querySelectorAll('.nav-btn').forEach(button => {
+      button.classList.remove('active');
+    });
+    event.currentTarget.classList.add('active');
+  }
+
+  changeSpeed(event) {
+    document.querySelectorAll('.speed-btn').forEach(button => {
+      button.classList.remove('active');
+    });
+    event.currentTarget.classList.add('active');
+    this.currentSpeed = parseInt(event.currentTarget.textContent.replace('x', ''), 10);
+    document.getElementById('game-speed').textContent = `Speed: ${this.currentSpeed}x`;
+  }
+
+  pauseGame() {
+    this.currentSpeed = 0;
+    document.getElementById('game-speed').textContent = 'Speed: Paused';
   }
 }
 
