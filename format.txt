@@ -1,0 +1,65 @@
+/myeconomy
+├── index.html
+├── styles/
+│   ├── main.css
+│   ├── departments.css
+│   ├── charts.css
+│   └── notifications.css
+├── scripts/
+│   ├── core/
+│   │   ├── economy-engine.js
+│   │   ├── ai-manager.js
+│   │   ├── data-loader.js
+│   │   ├── ai-models/
+│   │   │   ├── economic-relations.js
+│   │   │   ├── diplomacy.js
+│   │   │   ├── military.js
+│   │   │   └── crisis-model.js
+│   │   └── event-system.js
+│   ├── modules/
+│   │   ├── departments/
+│   │   │   ├── healthcare.js
+│   │   │   ├── taxation.js
+│   │   │   ├── defense.js
+│   │   │   ├── education.js
+│   │   │   ├── welfare.js
+│   │   │   ├── foreign-affairs.js
+│   │   │   └── department-base.js
+│   │   ├── companies.js
+│   │   ├── statistics.js
+│   │   ├── save-manager.js
+│   │   └── notification-system.js
+│   ├── utils/
+│   │   ├── helpers.js
+│   │   ├── charts.js
+│   │   ├── formatters.js
+│   │   ├── validators.js
+│   │   └── crypto-utils.js
+│   └── app.js
+├── data/
+│   ├── companies.json
+│   ├── countries.json
+│   ├── economic-models/
+│   │   ├── inflation-model.js
+│   │   └── trade-model.js
+│   └── user-saves/
+│       ├── auto-save.sav
+│       └── manual-saves/
+├── assets/
+│   ├── flags/
+│   │   ├── uk.png
+│   │   └── country-flags/
+│   ├── icons/
+│   │   ├── economy.png
+│   │   └── department-icons/
+│   └── fonts/
+│       └── economic-icons.ttf
+├── server/ (optional)
+│   ├── api/
+│   │   ├── save.js
+│   │   └── load.js
+│   └── auth/
+│       └── auth-middleware.js
+└── docs/
+    ├── economic-models.md
+    └── ai-spec.md

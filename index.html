@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myEconomy - UK Economic Simulator</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/departments.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <h1>myEconomy - United Kingdom</h1>
+        <div class="time-indicator">
+            <span id="current-date">January 2025</span>
+            <span id="game-speed">Speed: 1x</span>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Left Panel - Quick Stats -->
+        <section class="stats-panel">
+            <div class="economic-indicators">
+                <h2>Economic Snapshot</h2>
+                <div class="indicator-grid">
+                    <div class="indicator" data-metric="gdp">
+                        <span class="label">GDP</span>
+                        <span class="value">£3.0T</span>
+                    </div>
+                    <div class="indicator" data-metric="gdp-per-capita">
+                        <span class="label">GDP/Capita</span>
+                        <span class="value">£44,000</span>
+                    </div>
+                    <div class="indicator" data-metric="debt">
+                        <span class="label">Debt/GDP</span>
+                        <span class="value">85%</span>
+                    </div>
+                    <div class="indicator" data-metric="deficit">
+                        <span class="label">Deficit</span>
+                        <span class="value">-3.2%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="quick-access">
+                <h2>Government Tools</h2>
+                <div class="toolbar">
+                    <button id="pause-btn" class="tool-btn">
+                        <i class="fas fa-pause"></i>
+                    </button>
+                    <button id="speed-1x" class="speed-btn active">1x</button>
+                    <button id="speed-2x" class="speed-btn">2x</button>
+                    <button id="speed-5x" class="speed-btn">5x</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Control Center -->
+        <section class="control-center">
+            <nav class="main-nav">
+                <button class="nav-btn active" data-panel="departments">
+                    <i class="fas fa-building"></i>
+                    <span>Departments</span>
+                </button>
+                <button class="nav-btn" data-panel="companies">
+                    <i class="fas fa-industry"></i>
+                    <span>Companies</span>
+                </button>
+                <button class="nav-btn" data-panel="statistics">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistics</span>
+                </button>
+                <button class="nav-btn" data-panel="save-load">
+                    <i class="fas fa-save"></i>
+                    <span>Save/Load</span>
+                </button>
+                <button class="nav-btn" data-panel="next-month">
+                    <i class="fas fa-forward"></i>
+                    <span>Next Month</span>
+                </button>
+            </nav>
+
+            <!-- Dynamic Content Panels -->
+            <div class="content-panel" id="departments-panel">
+                <!-- Department controls will be loaded here -->
+            </div>
+
+            <div class="content-panel hidden" id="companies-panel">
+                <!-- Company management interface -->
+            </div>
+
+            <div class="content-panel hidden" id="statistics-panel">
+                <!-- Statistical visualizations -->
+            </div>
+
+            <div class="content-panel hidden" id="save-load-panel">
+                <!-- Save/load interface -->
+            </div>
+        </section>
+    </main>
+
+    <!-- System Notifications -->
+    <div class="notification-center">
+        <div class="notification-header">
+            <h3>Events & Alerts</h3>
+            <button id="clear-notifications"><i class="fas fa-trash"></i></button>
+        </div>
+        <ul id="notification-list"></ul>
+    </div>
+
+    <script src="scripts/core/data-loader.js"></script>
+    <script src="scripts/core/economy-engine.js"></script>
+    <script src="scripts/modules/departments/healthcare.js"></script>
+    <script src="scripts/modules/companies.js"></script>
+    <script src="scripts/app.js"></script>
+</body>
+</html>
