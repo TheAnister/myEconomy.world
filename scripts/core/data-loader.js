@@ -17,13 +17,39 @@ export class DataLoader {
     },
     company: {
       type: 'object',
-      required: ['name', 'sector', 'revenue'],
+      required: ['name', 'sector', 'revenue', 'profit', 'employees'],
       properties: {
         name: { type: 'string' },
         sector: { type: 'string' },
         revenue: { type: 'number' },
         profit: { type: 'number' },
-        employees: { type: 'number' }
+        employees: { type: 'number' },
+        market_cap: { type: 'number' },
+        subsidies: { type: 'number' },
+        market_share: { type: 'number' }
+      }
+    },
+    statistics: {
+      type: 'object',
+      required: ['economicIndicators', 'socialIndicators', 'healthIndicators', 'educationIndicators', 'environmentalIndicators'],
+      properties: {
+        economicIndicators: { type: 'object' },
+        socialIndicators: { type: 'object' },
+        healthIndicators: { type: 'object' },
+        educationIndicators: { type: 'object' },
+        environmentalIndicators: { type: 'object' }
+      }
+    },
+    department: {
+      type: 'object',
+      required: ['name', 'description'],
+      properties: {
+        name: { type: 'string' },
+        description: { type: 'string' },
+        budget: { type: 'number' },
+        employees: { type: 'number' },
+        taxRates: { type: 'object' },
+        thresholds: { type: 'object' }
       }
     }
   };
@@ -31,6 +57,8 @@ export class DataLoader {
   static #cache = {
     countries: null,
     companies: null,
+    statistics: null,
+    departments: null,
     timestamp: 0
   };
 
@@ -38,15 +66,15 @@ export class DataLoader {
     if (this.#validateCache('countries')) {
       return this.#cache.countries;
     }
-    
+
     try {
       const response = await fetch('/data/countries.json');
       const data = await response.json();
-      
+
       if (!this.#validateData(data.countries, this.#SCHEMAS.country)) {
         throw new Error('Invalid country data structure');
       }
-      
+
       this.#updateCache('countries', data.countries);
       return data.countries;
     } catch (error) {
@@ -63,11 +91,11 @@ export class DataLoader {
     try {
       const response = await fetch('/data/companies.json');
       const data = await response.json();
-      
+
       if (!this.#validateData(data.companies, this.#SCHEMAS.company)) {
         throw new Error('Invalid company data structure');
       }
-      
+
       this.#updateCache('companies', data.companies);
       return data.companies;
     } catch (error) {
@@ -76,12 +104,54 @@ export class DataLoader {
     }
   }
 
+  static async loadStatistics() {
+    if (this.#validateCache('statistics')) {
+      return this.#cache.statistics;
+    }
+
+    try {
+      const response = await fetch('/data/statistics.json');
+      const data = await response.json();
+
+      if (!this.#validateData(data, this.#SCHEMAS.statistics)) {
+        throw new Error('Invalid statistics data structure');
+      }
+
+      this.#updateCache('statistics', data);
+      return data;
+    } catch (error) {
+      console.error('Failed to load statistics:', error);
+      return this.#getFallbackData('statistics');
+    }
+  }
+
+  static async loadDepartments() {
+    if (this.#validateCache('departments')) {
+      return this.#cache.departments;
+    }
+
+    try {
+      const response = await fetch('/data/departments.json');
+      const data = await response.json();
+
+      if (!this.#validateData(data.departments, this.#SCHEMAS.department)) {
+        throw new Error('Invalid department data structure');
+      }
+
+      this.#updateCache('departments', data.departments);
+      return data.departments;
+    } catch (error) {
+      console.error('Failed to load departments:', error);
+      return this.#getFallbackData('departments');
+    }
+  }
+
   static async saveGameState(state, userId) {
     try {
       const validated = this.#validateSaveState(state);
       const compressed = this.#compressState(validated);
       const encrypted = await this.#encryptData(compressed, userId);
-      
+
       // Try server first
       try {
         await this.#sendToServer(encrypted, userId);
@@ -129,8 +199,24 @@ export class DataLoader {
   }
 
   static #validateData(data, schema) {
-    const validator = new ajv().compile(schema);
-    return validator(data);
+    // Simple schema validation without Ajv
+    if (!Array.isArray(data)) return false;
+
+    for (const item of data) {
+      if (typeof item !== schema.type) return false;
+      
+      for (const key of schema.required) {
+        if (!(key in item)) return false;
+      }
+      
+      for (const key in schema.properties) {
+        if (item[key] !== undefined && typeof item[key] !== schema.properties[key].type) {
+          return false;
+        }
+      }
+    }
+    
+    return true;
   }
 
   static #validateSaveState(state) {
@@ -162,13 +248,13 @@ export class DataLoader {
       const encoder = new TextEncoder();
       const key = await this.#deriveKey(userId);
       const iv = crypto.getRandomValues(new Uint8Array(12));
-      
+
       const encrypted = await crypto.subtle.encrypt(
         { name: 'AES-GCM', iv },
         key,
         encoder.encode(data)
       );
-      
+
       return { iv, data: new Uint8Array(encrypted) };
     } catch (error) {
       throw new Error('Encryption failed');
@@ -183,7 +269,7 @@ export class DataLoader {
         key,
         encryptedData.data
       );
-      
+
       return new TextDecoder().decode(decrypted);
     } catch (error) {
       throw new Error('Decryption failed');
@@ -198,7 +284,7 @@ export class DataLoader {
       false,
       ['deriveKey']
     );
-    
+
     return crypto.subtle.deriveKey(
       {
         name: 'PBKDF2',
@@ -232,7 +318,8 @@ export class DataLoader {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.#getAuthToken()}`
+        // Remove Authorization header if not needed
+        // 'Authorization': `Bearer ${this.#getAuthToken()}`
       },
       body: JSON.stringify({
         userId,
@@ -240,15 +327,16 @@ export class DataLoader {
         checksum: this.#createChecksum(data)
       })
     });
-    
+
     if (!response.ok) throw new Error('Server save failed');
   }
 
   static async #fetchFromServer(userId) {
     const response = await fetch(`/api/load/${userId}`, {
-      headers: { 'Authorization': `Bearer ${this.#getAuthToken()}` }
+      // Remove Authorization header if not needed
+      // headers: { 'Authorization': `Bearer ${this.#getAuthToken()}` }
     });
-    
+
     if (!response.ok) throw new Error('Server load failed');
     return response.json();
   }
@@ -271,6 +359,8 @@ export class DataLoader {
   static #getFallbackData(type) {
     if (type === 'countries') return this.#cache.countries || [];
     if (type === 'companies') return this.#cache.companies || [];
+    if (type === 'statistics') return this.#cache.statistics || [];
+    if (type === 'departments') return this.#cache.departments || [];
     return [];
   }
 }

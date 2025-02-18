@@ -36,7 +36,7 @@ export class CompanyManager {
 
   calculateTotalInvestment() {
     this.totalInvestment = Array.from(this.companies.values())
-      .reduce((sum, company) => sum + company.investment, 0);
+      .reduce((sum, company) => sum + (company.investment || 0), 0);
   }
 
   calculateStateOwnedEnterpriseProfits() {
@@ -60,7 +60,7 @@ export class CompanyManager {
       }
       sectorMetrics[company.sector].totalRevenue += company.revenue;
       sectorMetrics[company.sector].totalProfit += company.profit;
-      sectorMetrics[company.sector].totalInvestment += company.investment;
+      sectorMetrics[company.sector].totalInvestment += company.investment || 0;
       sectorMetrics[company.sector].totalEmployees += company.employees;
     });
 
@@ -95,7 +95,7 @@ export class CompanyManager {
   }
 
   #simulateRevenue(company, demandFactor, inflationFactor) {
-    const baseRevenue = company.baseRevenue * demandFactor;
+    const baseRevenue = company.revenue * demandFactor;
     const adjustedRevenue = baseRevenue * inflationFactor;
 
     const sectorGrowthRate = this.#getSectorGrowthRate(company.sector);
@@ -105,9 +105,9 @@ export class CompanyManager {
   }
 
   #simulateExpenses(company, inflationFactor) {
-    const baseExpenses = company.baseExpenses * inflationFactor;
-    const laborCosts = company.employees * company.avgSalary * inflationFactor;
-    const maintenanceCosts = company.assets * 0.05;
+    const baseExpenses = company.expenses * inflationFactor;
+    const laborCosts = company.employees * (company.avgSalary || 0) * inflationFactor;
+    const maintenanceCosts = (company.assets || 0) * 0.05;
 
     return baseExpenses + laborCosts + maintenanceCosts;
   }
@@ -115,19 +115,19 @@ export class CompanyManager {
   #simulateProfit(company, interestFactor, subsidy) {
     const revenue = company.revenue;
     const expenses = company.expenses;
-    const investmentCost = company.investment * interestFactor;
+    const investmentCost = (company.investment || 0) * interestFactor;
 
-    return revenue - (expenses + investmentCost) + subsidy;
+    return revenue - (expenses + investmentCost) + (subsidy || 0);
   }
 
   #simulateInvestments(company, interestRate) {
     const investmentGrowthRate = 1 + (interestRate / 100);
-    company.investment *= investmentGrowthRate;
+    company.investment = (company.investment || 0) * investmentGrowthRate;
   }
 
   #simulateEmployment(company, inflation) {
     const employmentGrowthRate = 1 + (inflation / 100);
-    company.employees *= employmentGrowthRate;
+    company.employees = Math.round(company.employees * employmentGrowthRate);
   }
 
   #simulateMarketShare(company, consumerDemand) {

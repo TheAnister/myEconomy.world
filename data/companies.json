@@ -1,6 +1,5 @@
 {
   "companies": [
-    // ========= Energy Sector (25 companies) =========
     {
       "name": "BP",
       "sector": "Energy",
@@ -252,7 +251,7 @@
       "market_share": 0.004
     },
 
-    // ========= Finance Sector (25 companies) =========
+
     {
       "name": "HSBC Holdings",
       "sector": "Finance",
@@ -504,7 +503,6 @@
       "market_share": 0.003
     },
 
-    // ========= Retail Sector (26 companies) =========
     {
       "name": "Tesco",
       "sector": "Retail",
@@ -766,7 +764,7 @@
       "market_share": 0.002
     },
 
-    // ========= Manufacturing Sector (26 companies) =========
+
     {
       "name": "Rolls-Royce Holdings",
       "sector": "Manufacturing",
@@ -1028,7 +1026,7 @@
       "market_share": 0.005
     },
 
-    // ========= Pharmaceutical Sector (26 companies) =========
+
     {
       "name": "GSK (GlaxoSmithKline)",
       "sector": "Pharmaceuticals",
@@ -1290,7 +1288,7 @@
       "market_share": 0.01
     },
 
-    // ========= Technology Sector (26 companies) =========
+  
     {
       "name": "ARM Holdings",
       "sector": "Technology",
@@ -1552,7 +1550,7 @@
       "market_share": 0.003
     },
 
-    // ========= Telecommunications Sector (25 companies) =========
+
     {
       "name": "BT Group",
       "sector": "Telecoms",
@@ -1804,7 +1802,7 @@
       "market_share": 0.0008
     },
 
-    // ========= Aerospace & Defense Sector (26 companies) =========
+
     {
       "name": "BAE Systems",
       "sector": "Aerospace",
@@ -2066,7 +2064,7 @@
       "market_share": 0.008
     },
 
-    // ========= Automotive Sector (25 companies) =========
+ 
     {
       "name": "Jaguar Land Rover",
       "sector": "Automotive",

@@ -1,0 +1,42 @@
+{
+  "departments": [
+    {
+      "name": "Department of Taxation",
+      "description": "Handles all tax-related policies and revenue generation",
+      "taxRates": {
+        "incomeTax": [10, 20, 30],
+        "corporateTax": 20,
+        "salesTax": 5,
+        "propertyTax": 1,
+        "capitalGainsTax": 15
+      },
+      "thresholds": {
+        "incomeTax": [5000, 20000, 50000]
+      }
+    },
+    {
+      "name": "Department of Health",
+      "description": "Manages healthcare services and public health policies",
+      "budget": 12000000,
+      "employees": 300
+    },
+    {
+      "name": "Department of Education",
+      "description": "Oversees public education system and policies",
+      "budget": 8000000,
+      "employees": 200
+    },
+    {
+      "name": "Department of Infrastructure",
+      "description": "Responsible for public infrastructure and construction projects",
+      "budget": 10000000,
+      "employees": 250
+    },
+    {
+      "name": "Department of Energy",
+      "description": "Manages energy resources and sustainability initiatives",
+      "budget": 6000000,
+      "employees": 100
+    }
+  ]
+}

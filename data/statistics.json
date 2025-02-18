@@ -1,0 +1,22 @@
+{
+  "economicIndicators": {
+    "consumption": 1000,
+    "investment": 500,
+    "governmentSpending": 300,
+    "netExports": 200
+  },
+  "socialIndicators": {
+    "populationBelowPovertyLine": 150,
+    "totalPopulation": 1000
+  },
+  "healthIndicators": {
+    "lifeExpectancyAtBirth": 75
+  },
+  "educationIndicators": {
+    "literatePopulation": 800,
+    "totalPopulation": 1000
+  },
+  "environmentalIndicators": {
+    "totalEmissions": 500
+  }
+}
