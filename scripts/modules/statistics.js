@@ -1,5 +1,4 @@
 import { DataLoader } from '../core/data-loader.js';
-import Chart from 'Chart.js/auto';
 
 export class StatisticsManager {
   constructor() {
@@ -208,71 +207,6 @@ export class StatisticsManager {
     this.simulateEconomicImpact(policy);
     this.simulateSocialImpact(policy);
     this.simulateEnvironmentalImpact(policy);
-  }
-
-  generateLineGraphData(indicator) {
-    return {
-      labels: Array.from({ length: this.history[indicator].length }, (_, i) => i + 1),
-      datasets: [{
-        label: indicator,
-        data: this.history[indicator],
-        borderColor: 'rgba(75, 192, 192, 1)',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        fill: true
-      }]
-    };
-  }
-
-  generatePieChartData() {
-    const sectorMetrics = this.getDetailedEconomicIndicators().sectorMetrics;
-    const labels = Object.keys(sectorMetrics);
-    const data = labels.map(sector => sectorMetrics[sector].totalRevenue);
-
-    return {
-      labels,
-      datasets: [{
-        data,
-        backgroundColor: labels.map((_, i) => `rgba(${(i * 30) % 255}, ${(i * 60) % 255}, ${(i * 90) % 255}, 0.2)`),
-        borderColor: labels.map((_, i) => `rgba(${(i * 30) % 255}, ${(i * 60) % 255}, ${(i * 90) % 255}, 1)`),
-        borderWidth: 1
-      }]
-    };
-  }
-
-  renderLineGraph(ctx, indicator) {
-    const data = this.generateLineGraphData(indicator);
-    new Chart(ctx, {
-      type: 'line',
-      data,
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top'
-          },
-          tooltip: {
-            mode: 'index',
-            intersect: false
-          }
-        }
-      }
-    });
-  }
-
-  renderPieChart(ctx) {
-    const data = this.generatePieChartData();
-    new Chart(ctx, {
-      type: 'pie',
-      data,
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top'
-          }
-        }
-      }
-    });
   }
 
   snapshot() {
