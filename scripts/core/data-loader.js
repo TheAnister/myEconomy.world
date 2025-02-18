@@ -17,7 +17,7 @@ export class DataLoader {
     },
     company: {
       type: 'object',
-      required: ['name', 'sector', 'revenue', 'profit', 'employees'],
+      required: ['name', 'sector', 'revenue', 'profit', 'employees', 'market_cap', 'subsidies', 'market_share'],
       properties: {
         name: { type: 'string' },
         sector: { type: 'string' },
