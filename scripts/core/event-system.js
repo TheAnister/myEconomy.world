@@ -1,29 +1,8 @@
 import { GameMath, EconomicIndicators } from '../utils/helpers.js';
 
+
+
 class EventSystem {
-  constructor() {
-    this.events = [];
-  }
-
-  initialize() {
-    this.registerCoreEvents();
-    // Other initialization logic...
-  }
-
-  registerCoreEvents() {
-    this.events.forEach(event => {
-      event.handler = event.handler.bind(this);
-    });
-  }
-
-  addEvent(event) {
-    this.events.push(event);
-  }
-}
-
-export default EventSystem;
-
-export class EventSystem {
   constructor() {
     this.eventQueue = new Map();
     this.subscriptions = new Map();
@@ -143,7 +122,6 @@ export class EventSystem {
 
     // System events
     this.subscribe('system.error', this.handleErrorEvent.bind(this), 100);
-    this.subscribe('system.debug', this.handleDebugEvent.bind(this), 100);
   }
 
   // -- Event Validation -- //
@@ -273,6 +251,10 @@ export class EventSystem {
 
   resetSystemState() {
     // Placeholder implementation
+  }
+
+  addEvent(event) {
+    this.events.push(event);
   }
 }
 

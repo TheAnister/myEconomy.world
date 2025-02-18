@@ -1,7 +1,6 @@
 import { StatisticsManager } from './modules/statistics.js';
 import { SaveManager } from './modules/save-manager.js';
 import { NotificationSystem } from './modules/notification-system.js';
-import { createExampleLineChart } from './utils/charts.js';
 import { formatNumber } from './utils/helpers.js';
 
 class App {
@@ -9,8 +8,6 @@ class App {
     this.statisticsManager = new StatisticsManager();
     this.saveManager = new SaveManager();
     this.notificationSystem = new NotificationSystem();
-    this.chartContext = document.getElementById('chart')?.getContext('2d');
-    this.chart = null;
     this.currentSpeed = 1;
   }
 
@@ -19,26 +16,20 @@ class App {
     await this.saveManager.initialize();
     this.setupEventListeners();
     this.notificationSystem.subscribe(this.handleNotification.bind(this));
-    if (this.chartContext) {
-      this.chart = createExampleLineChart(this.chartContext);
-    }
     this.renderStatistics();
     this.loadSavedGameState();
   }
 
   setupEventListeners() {
-    document.getElementById('saveButton')?.addEventListener('click', this.saveGameState.bind(this));
-    document.getElementById('loadButton')?.addEventListener('click', this.loadSavedGameState.bind(this));
-    
-    document.querySelectorAll('.nav-btn').forEach(button => {
-      button.addEventListener('click', this.handleNavigation.bind(this));
-    });
-    
+    document.getElementById('pause-btn')?.addEventListener('click', this.pauseGame.bind(this));
     document.querySelectorAll('.speed-btn').forEach(button => {
       button.addEventListener('click', this.changeSpeed.bind(this));
     });
-    
-    document.getElementById('pause-btn')?.addEventListener('click', this.pauseGame.bind(this));
+    document.querySelectorAll('.nav-btn').forEach(button => {
+      button.addEventListener('click', this.handleNavigation.bind(this));
+    });
+    document.getElementById('saveButton')?.addEventListener('click', this.saveGameState.bind(this));
+    document.getElementById('loadButton')?.addEventListener('click', this.loadSavedGameState.bind(this));
   }
 
   handleNotification(notification) {

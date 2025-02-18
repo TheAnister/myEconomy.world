@@ -5,6 +5,9 @@
   border-radius: var(--border-radius);
 }
 
+.hidden {
+  display: none !important;
+}
 .department-header {
   display: flex;
   justify-content: space-between;

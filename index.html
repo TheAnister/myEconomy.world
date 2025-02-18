@@ -11,7 +11,7 @@
 <body>
     <header class="dashboard-header">
         <h1>myEconomy - United Kingdom</h1>
-
+        <img src="assets/flags/uk.png" alt="UK Flag" id="uk-flag">
         <div class="time-indicator">
             <span id="current-date">January 2025</span>
             <span id="game-speed">Speed: 1x</span>
@@ -98,11 +98,14 @@
         </div>
         <ul id="notification-list"></ul>
     </div>
+<div class="content-panel hidden" id="save-load-panel">
+    <button id="saveButton" class="save-load-btn">Save Game</button>
+    <button id="loadButton" class="save-load-btn">Load Game</button>
+</div>
     <script src="scripts/core/data-loader.js" type="module"></script>
     <script src="scripts/core/economy-engine.js" type="module"></script>
     <script src="scripts/modules/departments/healthcare.js" type="module"></script>
     <script src="scripts/modules/companies.js" type="module"></script>
     <script src="scripts/app.js" type="module"></script>
-    <script src="scripts/libs/chart.min.js"></script>
 </body>
 </html>
