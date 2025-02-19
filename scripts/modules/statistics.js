@@ -20,6 +20,9 @@ export class StatisticsManager {
 
   async initialize() {
     const stats = await DataLoader.loadStatistics();
+    if (!stats.economicIndicators || !stats.socialIndicators || !stats.healthIndicators || !stats.educationIndicators || !stats.environmentalIndicators) {
+      throw new Error('Invalid statistics data structure');
+    }
     this.economicIndicators = stats.economicIndicators;
     this.socialIndicators = stats.socialIndicators;
     this.healthIndicators = stats.healthIndicators;
@@ -205,3 +208,18 @@ export class StatisticsManager {
 
   simulatePolicyImpact(policy) {
     this.simulateEconomicImpact(policy);
+    this.simulateSocialImpact(policy);
+    this.simulateEnvironmentalImpact(policy);
+  }
+
+  snapshot() {
+    return {
+      economicIndicators: this.economicIndicators,
+      socialIndicators: this.socialIndicators,
+      healthIndicators: this.healthIndicators,
+      educationIndicators: this.educationIndicators,
+      environmentalIndicators: this.environmentalIndicators,
+      history: this.history
+    };
+  }
+}
