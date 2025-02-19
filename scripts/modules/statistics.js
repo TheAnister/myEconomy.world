@@ -100,4 +100,108 @@ export class StatisticsManager {
       carbonFootprint: this.calculateCarbonFootprint()
     };
   }
-}
+
+  getDetailedEconomicIndicators() {
+    return {
+      ...this.economicIndicators,
+      GDP: this.calculateGDP(),
+      unemploymentRate: this.calculateUnemploymentRate(),
+      inflationRate: this.calculateInflationRate()
+    };
+  }
+
+  getDetailedSocialIndicators() {
+    return {
+      ...this.socialIndicators,
+      povertyRate: this.calculatePovertyRate()
+    };
+  }
+
+  getDetailedHealthIndicators() {
+    return {
+      ...this.healthIndicators,
+      lifeExpectancy: this.calculateLifeExpectancy()
+    };
+  }
+
+  getDetailedEducationIndicators() {
+    return {
+      ...this.educationIndicators,
+      literacyRate: this.calculateLiteracyRate()
+    };
+  }
+
+  getDetailedEnvironmentalIndicators() {
+    return {
+      ...this.environmentalIndicators,
+      carbonFootprint: this.calculateCarbonFootprint()
+    };
+  }
+
+  simulateEconomicImpact(policy) {
+    // Simulate economic impact of a given policy
+    switch (policy.type) {
+      case 'taxIncrease':
+        this.economicIndicators.governmentSpending += policy.amount;
+        this.economicIndicators.consumption -= policy.amount * 0.5;
+        break;
+      case 'taxDecrease':
+        this.economicIndicators.governmentSpending -= policy.amount;
+        this.economicIndicators.consumption += policy.amount * 0.5;
+        break;
+      case 'infrastructureSpending':
+        this.economicIndicators.governmentSpending += policy.amount;
+        this.economicIndicators.investment += policy.amount * 0.3;
+        break;
+      case 'socialSpending':
+        this.economicIndicators.governmentSpending += policy.amount;
+        this.socialIndicators.populationBelowPovertyLine -= policy.amount * 1000;
+        break;
+      default:
+        break;
+    }
+
+    this.calculateGDP();
+    this.calculateUnemploymentRate();
+    this.calculateInflationRate();
+  }
+
+  simulateSocialImpact(policy) {
+    // Simulate social impact of a given policy
+    switch (policy.type) {
+      case 'educationFunding':
+        this.educationIndicators.literatePopulation += policy.amount * 1000;
+        break;
+      case 'healthcareFunding':
+        this.healthIndicators.lifeExpectancyAtBirth += policy.amount * 0.1;
+        break;
+      case 'housingSubsidies':
+        this.socialIndicators.populationBelowPovertyLine -= policy.amount * 500;
+        break;
+      default:
+        break;
+    }
+
+    this.calculateLiteracyRate();
+    this.calculateLifeExpectancy();
+    this.calculatePovertyRate();
+  }
+
+  simulateEnvironmentalImpact(policy) {
+    // Simulate environmental impact of a given policy
+    switch (policy.type) {
+      case 'carbonTax':
+        this.environmentalIndicators.totalEmissions -= policy.amount * 100000;
+        break;
+      case 'renewableEnergyFunding':
+        this.environmentalIndicators.totalEmissions -= policy.amount * 50000;
+        break;
+      default:
+        break;
+    }
+
+    this.calculateCarbonFootprint();
+  }
+
+  simulatePolicyImpact(policy) {
+    this.simulateEconomicImpact(policy);

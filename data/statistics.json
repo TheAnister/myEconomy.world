@@ -3,7 +3,11 @@
     "consumption": 1000,
     "investment": 500,
     "governmentSpending": 300,
-    "netExports": 200
+    "netExports": 200,
+    "unemployed": 500,
+    "laborForce": 1000,
+    "consumerPriceIndex": 110,
+    "previousConsumerPriceIndex": 100
   },
   "socialIndicators": {
     "populationBelowPovertyLine": 150,

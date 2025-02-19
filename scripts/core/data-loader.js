@@ -200,22 +200,18 @@ export class DataLoader {
 
   static #validateData(data, schema) {
     // Simple schema validation without Ajv
-    if (!Array.isArray(data)) return false;
+    if (!Array.isArray(data) && typeof data !== 'object') return false;
 
-    for (const item of data) {
-      if (typeof item !== schema.type) return false;
-      
-      for (const key of schema.required) {
-        if (!(key in item)) return false;
-      }
-      
-      for (const key in schema.properties) {
-        if (item[key] !== undefined && typeof item[key] !== schema.properties[key].type) {
-          return false;
-        }
-      }
+    for (const key of schema.required) {
+      if (!(key in data)) return false;
     }
     
+    for (const key in data) {
+      if (data[key] !== undefined && typeof data[key] !== schema.properties[key]?.type) {
+        return false;
+      }
+    }
+
     return true;
   }
 
